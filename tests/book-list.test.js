@@ -1,6 +1,5 @@
-const { response } = require('express')
 const app = require('../app')
-const request = require('supertest')(app)
+const request = require('supertest')
 
 let mockBookList = [
     {
@@ -32,7 +31,7 @@ let mockBookList = [
 
 describe('As a user,', () => {
     it('I want to be able to see a list of every book in the library so that I can browse the selections.', async(done) => {
-        request.get('/api/books')
+        request(app).get('/api/books')
             .then(response => {
                 // expect(response.body).toBe(mockBookList)
                 expect(response.body).toEqual(mockBookList)
@@ -40,34 +39,28 @@ describe('As a user,', () => {
             })
     })
     it('see individual book deatils', async (done) => {
-        request.get('/api/books/' + 1)
+        request(app).get('/api/books/' + 1)
             .then(response => {
                 // expect(response.body).toBe(mockBookList[0])
                 expect(response.body).toEqual(mockBookList[0])
                 done();
             })
     })
-    it('able to checkout a book for 2 weeks', async (done) => {
-        const date = new Date()
-        date.setDate(date.getDate() + 14);   
-        
-        request.get('/api/books/1/checkout/' + 1234)
+    it("I want to be able to check out a book for two weeks so that I may read it", async () => {
+        let response = await request(app).get("/api/books/1/checkout/1234")
+        // console.log(response.body)
+        expect(response.status).toEqual(200);
+        expect(response.body.CheckedOut).toEqual(true);
+        expect(response.body.UserID).toEqual("1234");  
+      });
+     
+    it('if a book is not available to check out because someone else checked it out', async (done) => {
+        request(app).get('/api/books/3/checkout' + 77777)
             .then(response => {
-                console.log("*********", (response.text) )   
-                expect(response.text.CheckedOut).toEqual(true)
-                expect(response.text.DateDueBack.getDay()).toContain(date.getDay())
-                expect(response.text.UserID).toContain(1234)
-                done();
+               expect(response.body).toContain("not available")
+               done();
             })
     })
-    
-    // it('if a book is not available to check out because someone else checked it out', async (done) => {
-    //     request.get('/api/books/3/checkout' + 77777)
-    //         .then(response => {
-    //            expect(response.body).toContain("not available")
-    //            done();
-    //         })
-    // })
 
     // it('if a book is not available to check out because I have it', async (done) => {
     //     request.get('/api/books/3/checkout' + 99999)
@@ -77,7 +70,4 @@ describe('As a user,', () => {
     //         })
     // })
 
-}) 
-  
-
- 
+})  

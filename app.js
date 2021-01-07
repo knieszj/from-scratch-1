@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 3020;
+// const PORT = process.env.PORT || 3020;
 
+app.use(express.json());
 
 let bookList = [
     {
@@ -33,7 +34,7 @@ let bookList = [
 
 app.get('/api/books', (request, response) => {
     //send bookList to Server/ API 
-    response.send(bookList)
+    response.json(bookList)
 })
 
 app.get('/api/books/:bookID', (request, response) => {
@@ -41,7 +42,7 @@ app.get('/api/books/:bookID', (request, response) => {
     let aBook = bookList.filter(book => book.BookID === request.params.bookID ? true : false)
     aBook.length === 1 ?
         response.json(aBook[0]) //if id is vaild
-        : response.send("Invaild book ID") //if id not vaild
+        : response.json("Invaild book ID") //if id not vaild
 })
 
 app.get('/api/books/:bookId/checkout/:userId', (request, response) => {
@@ -59,12 +60,13 @@ app.get('/api/books/:bookId/checkout/:userId', (request, response) => {
         checkoutBook[0].CheckedOut = true
         checkoutBook[0].DateDueBack = date
         checkoutBook[0].UserID = userIdParam
-        response.json([checkoutBook[0], "The book is available, and you are checking it out"])
+        // response.json([checkoutBook[0], "The book is available, and you are checking it out"])
+        response.json(checkoutBook[0])
     } else {
         checkoutBook[0].UserID === request.params.userId ?             
-            response.json(`You have the book, and you checked it out on ${date}`) //if I checked it out 
+            response.send(`You have the book, and you checked it out on ${date}`) //if I checked it out 
             : //if someone else checked it out 
-            response.json(`The book is not available, please check back after ${checkoutBook[0].DateDueBack}`)
+            response.send(`The book is not available, please check back after ${checkoutBook[0].DateDueBack}`)
         }
 })
 
@@ -74,5 +76,5 @@ app.get('/api/books/:bookId/checkout/:userId', (request, response) => {
 
   
 
-app.listen(PORT);
+// app.listen(PORT);
 module.exports = app; 
