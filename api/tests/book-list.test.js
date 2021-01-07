@@ -58,6 +58,7 @@ describe('As a user,', () => {
         request(app).get('/api/books/3/checkout' + 77777)
             .then(response => {
                expect(response.body).toContain("not available")
+               // or "you have the book"
                done();
             })
     })

@@ -64,9 +64,9 @@ app.get('/api/books/:bookId/checkout/:userId', (request, response) => {
         response.json(checkoutBook[0])
     } else {
         checkoutBook[0].UserID === request.params.userId ?             
-            response.send(`You have the book, and you checked it out on ${date}`) //if I checked it out 
+            response.json(`You have the book, and you checked it out on ${date}`) //if I checked it out 
             : //if someone else checked it out 
-            response.send(`The book is not available, please check back after ${checkoutBook[0].DateDueBack}`)
+            response.json(`The book is not available, please check back after ${checkoutBook[0].DateDueBack}`)
         }
 })
 
