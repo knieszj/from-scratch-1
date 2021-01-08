@@ -1,40 +1,43 @@
 const express = require("express");
 const app = express();
 // const PORT = process.env.PORT || 3020;
+const PORT = 3020;
+const bookList = require('./library.json');
 
 app.use(express.json());
 
-let bookList = [
-    {
-        BookID: '1',
-        Title: 'Test Book Tilte',
-        Author: 'Test Author',
-        ISBN: "Test ISBN",
-        CheckedOut: false,
-        DateDueBack: "2021-01-01",
-        UserID: null
-    }, {
-        BookID: '2',
-        Title: 'Test Book Tilte 2',
-        Author: 'Test Author 2',
-        ISBN: "Test ISBN 2",
-        CheckedOut: false,
-        DateDueBack: "2021-03-01",
-        UserID: null
-    }, {
-        BookID: '3',
-        Title: 'Test Book Tilte 3',
-        Author: 'Test Author 3',
-        ISBN: "Test ISBN 3",
-        CheckedOut: true,
-        DateDueBack: "2021-05-05",
-        UserID: '99999'
-    },
-]
+// let bookList = [
+//     {
+//         BookID: '1',
+//         Title: 'Test Book Tilte',
+//         Author: 'Test Author',
+//         ISBN: "Test ISBN",
+//         CheckedOut: false,
+//         DateDueBack: "2021-01-01",
+//         UserID: null
+//     }, {
+//         BookID: '2',
+//         Title: 'Test Book Tilte 2',
+//         Author: 'Test Author 2',
+//         ISBN: "Test ISBN 2",
+//         CheckedOut: false,
+//         DateDueBack: "2021-03-01",
+//         UserID: null
+//     }, {
+//         BookID: '3',
+//         Title: 'Test Book Tilte 3',
+//         Author: 'Test Author 3',
+//         ISBN: "Test ISBN 3",
+//         CheckedOut: true,
+//         DateDueBack: "2021-05-05",
+//         UserID: '99999'
+//     },
+// ]
 
 app.get('/api/books', (request, response) => {
     //send bookList to Server/ API 
-    response.json(bookList)
+    response.json(bookList) 
+    // response.send("smiley face")
 })
 
 app.get('/api/books/:bookID', (request, response) => {
@@ -69,12 +72,7 @@ app.get('/api/books/:bookId/checkout/:userId', (request, response) => {
             response.json(`The book is not available, please check back after ${checkoutBook[0].DateDueBack}`)
         }
 })
-
-
-
-
-
   
 
-// app.listen(PORT);
-module.exports = app; 
+app.listen(PORT);
+module.exports = app;  

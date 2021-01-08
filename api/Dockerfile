@@ -1,13 +1,16 @@
 FROM node:latest
 
-WORKDIR /app
+RUN mkdir -p /api
 
-COPY . .
+COPY ./ ./api
+
+WORKDIR /api
 
 RUN npm install 
-
-ENV PORT = 3020
 
 EXPOSE 3020
 
 CMD ["npm", "start"]
+
+
+
