@@ -1,11 +1,16 @@
 version: '3'
 
 services:
-  survey:
-    build: ./
-    # depends_on:
-    #   - 'database'
+  
+  api-server:
+    build: api/
     ports: 
       - '3020:3020'
+    # image: library-tdd_api-server
 
+  front-end:
+    build: front-end/
+    ports: 
+      - '3000:3000'
+    # image: library-tdd_front-end
  
